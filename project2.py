@@ -54,7 +54,7 @@ class Minesweeper:
             self.print()
             choicex, choicey = self.select()
 
-        self.checkSurround(choicex, choicey)
+        #self.checkSurround(choicex, choicey)
 
 
     def print(self):
@@ -121,10 +121,20 @@ class Minesweeper:
         return x - 1 + ((y - 1) * self.col)
 
     def checkSurround(self, x, y):
-        #check = [-1, 1, self.col, self.col - 1, self.col + 1, -self.col, -self.col -1, -self.col + 1]
-        checklist = self.split(self.boardStack,self.col)
+        x -= 1
+        y -= 1
+        # check = [-1, 1, self.col, self.col - 1, self.col + 1, -self.col, -self.col -1, -self.col + 1]
+        board = self.split(self.boardStack,self.col)
         # y tells us which list to choose from then x tells us which element within that list we are checking
-        
+        checky = [y, y + 1, y - 1]
+        checkx = [x , x + 1, x - 1]
+        for y in checky:
+            for x in checkx:
+                if x < 0 or y < 0:
+                    continue
+                else:
+                    print(x, y, board[x][y])
+
 
     def split(self, alist, cols):
         oldlist = alist
@@ -133,10 +143,11 @@ class Minesweeper:
             newlist = []
             for i in range(cols):
                 newlist.append(oldlist[i])
-            oldlist = oldlist[chunks:]
+            oldlist = oldlist[cols:]
             sublist.append(newlist)
         return sublist
 
 
 test = Minesweeper()
 
+test.checkSurround(1,2)
