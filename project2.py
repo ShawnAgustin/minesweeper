@@ -39,12 +39,13 @@ class Minesweeper:
 
         choicex, choicey = self.select()
         index = self.convertCoords(choicex, choicey)
-        
+        first = True
         while True:
             option = input("\"select\" or \"flag\" or \"unflag\"? ").strip()
             if option == "select":
-                #if self.playerStack.count('?') != self.col * self.row:
-                #    self.selectFirst(choicex,choicey)
+                if first == True:
+                    self.selectFirst(choicex,choicey)
+                    first = False
                 self.choose(choicex, choicey)
                 if self.playerStack[index] == 'B':
                     self.print()
@@ -111,15 +112,13 @@ class Minesweeper:
         #print(self.playerStack)
 
     def selectFirst(self,x,y):
-        #x = int(input("Select an x coordinate: "))
-        #y = int(input("Select a y coordinate: "))
         while not self.checkValid(x, y):
             x = int(input("Select an x coordinate: "))
             y = int(input("Select a y coordinate: "))
         while True:
             if self.boardStack[self.convertCoords(x,y)] == "B":
                 random.shuffle(self.boardStack)
-                break
+                continue
             else:
                 break
                 
