@@ -54,6 +54,8 @@ class Minesweeper:
             self.print()
             choicex, choicey = self.select()
 
+        self.checkSurround(choicex, choicey)
+
 
     def print(self):
         print(" " , end = "|  ")
@@ -118,32 +120,23 @@ class Minesweeper:
     def convertCoords(self, x, y):
         return x - 1 + ((y - 1) * self.col)
 
-    def checkSurround(self, index):
-        check = [-1, 1, self.col, self.col - 1, self.col + 1, -self.col, -self.col -1, -self.col + 1]
-        print('index', index)
-        for i in range(len(check)):
-            print(i)
-            print("\t",check[i])
-            print("\t\t", index + check[i])
-            '''
-            if i < 0 or (i > (self.row * self.col)):
-                continue
-            else:
-                print(index, i, index + i)
+    def checkSurround(self, x, y):
+        #check = [-1, 1, self.col, self.col - 1, self.col + 1, -self.col, -self.col -1, -self.col + 1]
+        checklist = self.split(self.boardStack,self.col)
+        # y tells us which list to choose from then x tells us which element within that list we are checking
+        
 
-            '''
-    def split(self, list, chunks):
-        '''how tf am i gonna do this shit'''
+    def split(self, alist, cols):
+        oldlist = alist
         sublist = []
-        newlist = []
-        oldlist = list
         while len(oldlist) != 0:
-            for i in range(chunks):
-                print(oldlist[i])
+            newlist = []
+            for i in range(cols):
                 newlist.append(oldlist[i])
             oldlist = oldlist[chunks:]
-            print(oldlist)
+            sublist.append(newlist)
+        return sublist
 
 
 test = Minesweeper()
-test.split([1,2,3,4,5,6],3)
+
