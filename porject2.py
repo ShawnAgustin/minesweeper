@@ -1,6 +1,6 @@
 import random
 
-
+"this class is lame"
 class Minesweeper:
     def __init__(self):
         self.col = int(input("Enter a length: "))
