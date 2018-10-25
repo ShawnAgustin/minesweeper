@@ -39,6 +39,7 @@ class Minesweeper:
 
         choicex, choicey = self.select()
         index = self.convertCoords(choicex, choicey)
+        print(index)
         while True:
             option = input("\"select\" or \"flag\" or \"unflag\"? ")
             if option == "select":
@@ -47,6 +48,9 @@ class Minesweeper:
                     print("Game Over")
                     break
                 else:
+                    #if self.checkSurround(choicex,choicey) == 0:
+                     #   print("AYYYYYY")
+                    #else:
                     self.playerStack[index] = self.checkSurround(choicex, choicey)
                     print(self.playerStack)
             elif option == "flag":
@@ -56,6 +60,8 @@ class Minesweeper:
 
             self.print()
             choicex, choicey = self.select()
+            index = self.convertCoords(choicex, choicey)
+
 
 
 
@@ -69,7 +75,7 @@ class Minesweeper:
             print(j, end="   ")
             split = self.split(self.playerStack,self.col)
             for row in range(self.col):
-                print(split[j-1][row], end="     ")
+                print(split[j-1][row], end="   ")
             print ("\n-")
 
     def checkValid(self, x, y):
@@ -160,5 +166,3 @@ class Minesweeper:
 
 
 test = Minesweeper()
-
-print(test.checkSurround(1,2))
