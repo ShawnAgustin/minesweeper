@@ -121,19 +121,24 @@ class Minesweeper:
         return x - 1 + ((y - 1) * self.col)
 
     def checkSurround(self, x, y):
+        bombs = 0
         x -= 1
         y -= 1
-        # check = [-1, 1, self.col, self.col - 1, self.col + 1, -self.col, -self.col -1, -self.col + 1]
         board = self.split(self.boardStack,self.col)
         # y tells us which list to choose from then x tells us which element within that list we are checking
         checky = [y, y + 1, y - 1]
         checkx = [x , x + 1, x - 1]
+        # print(board)
         for y in checky:
             for x in checkx:
                 if x < 0 or y < 0:
+                    # out of range error messes up the check
                     continue
                 else:
-                    print(x, y, board[x][y])
+                    if board[y][x] == 'B':
+                        bombs += 1
+                   # print(y, x, board[y][x])
+        return bombs
 
 
     def split(self, alist, cols):
@@ -150,4 +155,4 @@ class Minesweeper:
 
 test = Minesweeper()
 
-test.checkSurround(1,2)
+print(test.checkSurround(1,2))
