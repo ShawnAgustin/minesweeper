@@ -61,13 +61,16 @@ class Minesweeper:
 
 
     def print(self):
-        print(" " , end = "|  ")
+        print(" ", end="|  ")
         for i in range(1, self.col+1):
-            print(i, end = "  |  ")
+            print(i, end="  |  ")
         print("\n-")
         for j in range(1, self.row+1):
-            print(j)
-            print ("-")
+            print(j, end="   ")
+            split = self.split(self.playerStack,self.col)
+            for row in range(self.col):
+                print(split[j-1][row], end="     ")
+            print ("\n-")
 
     def checkValid(self, x, y):
         if self.col < x or self.row < y or x < 0 or y < 0:
