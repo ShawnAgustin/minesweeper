@@ -35,13 +35,10 @@ class Minesweeper:
         for i in range(self.bomb):
             self.boardStack.append('B')
         random.shuffle(self.boardStack)
-        #print("BoardStack", self.boardStack)
 
         # fills the playerStack with empty '' strings
         for i in range(self.row * self.col):
             self.playerStack.append('?')
-
-        #print("PlayerStack", self.playerStack)
 
         self.print()
 
@@ -63,12 +60,9 @@ class Minesweeper:
                     print("This is position is flagged, unflag it if you want to select this position")
                 else:
                     if self.checkSurround(choicex,choicey) == 0:
-                        print('should be 0')
-                        print(choicex, choicey)
                         self.showSurround(choicex,choicey)
                     #else:
                     self.playerStack[index] = self.checkSurround(choicex, choicey)
-                    print(self.playerStack)
             elif option == "flag":
                 self.flag(choicex, choicey)
             elif option == "unflag":
@@ -77,6 +71,10 @@ class Minesweeper:
             self.print()
             choicex, choicey = self.select()
             index = self.convertCoords(choicex, choicey)
+
+        after = input("Play again? (y/n) \n")
+        self._getSolution()
+            
 
 
 
@@ -152,7 +150,17 @@ class Minesweeper:
         pass
 
     def _getSolution(self):
-        pass
+        print("== SOLUTION ==")
+        print(" ", end="|  ")
+        for i in range(1, self.col+1):
+            print(i, end="  |  ")
+        print("\n-")
+        for j in range(1, self.row+1):
+            print(j, end="   ")
+            split = self.split(self.boardStack,self.col)
+            for row in range(self.col):
+                print(split[j-1][row], end="     ")
+            print ("\n-")
 
     def convertCoords(self, x, y):
         return x - 1 + ((y - 1) * self.col)
@@ -194,7 +202,6 @@ class Minesweeper:
                     pair.append(y+1)
                     toCheck.append(pair)
                     '''insert code here will use checkSurround'''
-        print(toCheck)
         for i in toCheck:
             selected = self.convertCoords(i[0],i[1])
             self.playerStack[selected] = self.checkSurround(i[0], i[1])
@@ -218,3 +225,4 @@ class Minesweeper:
 
 
 test = Minesweeper()
+
