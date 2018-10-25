@@ -5,10 +5,10 @@ class Minesweeper:
     def __init__(self):
         self.col = int(input("Enter a length: "))
         self.row = int(input("Enter a height: "))
-        self.bomb = int(input("Enter number of bombs (max " + str(self.row *self.col)+ " bombs): "))
+        self.bomb = int(input("Enter number of bombs (max " + str(self.row *self.col - 1)+ " bombs): "))
 
         # if number of bombs is invalid it will loop until valid
-        while self.bomb > (self.row * self.col) or self.bomb <= 0:
+        while self.bomb >= (self.row * self.col) or self.bomb <= 0:
             print("Please enter a valid number of bombs")
             self.bomb = int(input("Enter number of bombs: "))
 
@@ -33,6 +33,7 @@ class Minesweeper:
         # fills the playerStack with empty '' strings
         for i in range(self.row * self.col):
             self.playerStack.append('?')
+
         print("PlayerStack", self.playerStack)
 
         self.print()
