@@ -1,6 +1,13 @@
 import random
 
-"this class is lame"
+'''
+
+TODO:
+-bomb = 0 then show surroundings
+-checkStatus()
+-_getSolution()
+
+'''
 class Minesweeper:
     def __init__(self):
         self.col = int(input("Enter a length: "))
@@ -28,13 +35,13 @@ class Minesweeper:
         for i in range(self.bomb):
             self.boardStack.append('B')
         random.shuffle(self.boardStack)
-        print("BoardStack", self.boardStack)
+        #print("BoardStack", self.boardStack)
 
         # fills the playerStack with empty '' strings
         for i in range(self.row * self.col):
             self.playerStack.append('?')
 
-        print("PlayerStack", self.playerStack)
+        #print("PlayerStack", self.playerStack)
 
         self.print()
 
@@ -55,8 +62,10 @@ class Minesweeper:
                 elif self.playerStack[index] == 'F':
                     print("This is position is flagged, unflag it if you want to select this position")
                 else:
-                    #if self.checkSurround(choicex,choicey) == 0:
-                     #   print("AYYYYYY")
+                    if self.checkSurround(choicex,choicey) == 0:
+                        print('should be 0')
+                        print(choicex, choicey)
+                        self.showSurround(choicex,choicey)
                     #else:
                     self.playerStack[index] = self.checkSurround(choicex, choicey)
                     print(self.playerStack)
@@ -131,7 +140,6 @@ class Minesweeper:
 
             return
         self.playerStack[selected] = 'F'
-        print(self.playerStack)
 
     def unflag(self, x, y):
         selected = self.convertCoords(x, y)
@@ -139,7 +147,6 @@ class Minesweeper:
             print("This position has already been revealed")
             return
         self.playerStack[selected] = '?'
-        print(self.playerStack)
 
     def checkStatus(self):
         pass
@@ -158,7 +165,6 @@ class Minesweeper:
         # y tells us which list to choose from then x tells us which element within that list we are checking
         checky = [y, y + 1, y - 1]
         checkx = [x , x + 1, x - 1]
-        #print(board)
         for y in checky:
             for x in checkx:
                 if x < 0 or y < 0 or x >= self.col or y >= self.row:
@@ -167,9 +173,32 @@ class Minesweeper:
                 else:
                     if board[y][x] == 'B':
                         bombs += 1
-                    #print(y, x, board[y][x])
         return bombs
 
+    def showSurround(self, x, y):
+        toCheck = []
+        x -= 1
+        y -= 1
+        board = self.split(self.boardStack,self.col)
+        # y tells us which list to choose from then x tells us which element within that list we are checking
+        checky = [y, y + 1, y - 1]
+        checkx = [x , x + 1, x - 1]
+        for y in checky:
+            for x in checkx:
+                if x < 0 or y < 0 or x >= self.col or y >= self.row:
+                    # out of range error messes up the check
+                    continue
+                else:
+                    pair = []
+                    pair.append(x+1)
+                    pair.append(y+1)
+                    toCheck.append(pair)
+                    '''insert code here will use checkSurround'''
+        print(toCheck)
+        for i in toCheck:
+            selected = self.convertCoords(i[0],i[1])
+            self.playerStack[selected] = self.checkSurround(i[0], i[1])
+         #need to convert index into coords
 
     def split(self, alist, cols):
         oldlist = alist
@@ -181,6 +210,11 @@ class Minesweeper:
             oldlist = oldlist[cols:]
             sublist.append(newlist)
         return sublist
+
+    def convertToCoords(self, index):
+        x =1
+        y =1
+        return x, y
 
 
 test = Minesweeper()
