@@ -133,7 +133,7 @@ class Minesweeper:
 
             '''
     def split(self, list, chunks):
-        '''need to edit'''
+        '''how tf am i gonna do this shit'''
         sublist = []
         newlist = []
         oldlist = list
