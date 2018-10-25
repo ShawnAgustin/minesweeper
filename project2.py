@@ -32,21 +32,26 @@ class Minesweeper:
 
         # fills the playerStack with empty '' strings
         for i in range(self.row * self.col):
-            self.playerStack.append('')
+            self.playerStack.append('?')
         print("PlayerStack", self.playerStack)
 
         self.print()
 
         choicex, choicey = self.select()
         index = self.convertCoords(choicex, choicey)
-        print(index)
+        
         while True:
-            option = input("\"select\" or \"flag\" or \"unflag\"? ")
+            option = input("\"select\" or \"flag\" or \"unflag\"? ").strip()
             if option == "select":
+                #if self.playerStack.count('?') != self.col * self.row:
+                #    self.selectFirst(choicex,choicey)
                 self.choose(choicex, choicey)
                 if self.playerStack[index] == 'B':
+                    self.print()
                     print("Game Over")
                     break
+                elif self.playerStack[index] == 'F':
+                    print("This is position is flagged, unflag it if you want to select this position")
                 else:
                     #if self.checkSurround(choicex,choicey) == 0:
                      #   print("AYYYYYY")
@@ -75,7 +80,7 @@ class Minesweeper:
             print(j, end="   ")
             split = self.split(self.playerStack,self.col)
             for row in range(self.col):
-                print(split[j-1][row], end="   ")
+                print(split[j-1][row], end="     ")
             print ("\n-")
 
     def checkValid(self, x, y):
@@ -96,31 +101,44 @@ class Minesweeper:
     def choose(self, x, y):
         selected = self.convertCoords(x, y)
         revealed = self.boardStack[selected]
-        if self.playerStack[selected] != '':
+        if self.playerStack[selected] == type(int):
             print("This position has already been revealed")
             return
-        self.playerStack[selected] = revealed
+        if self.playerStack[selected] == "F":
+            return
+        else:
+            self.playerStack[selected] = revealed
         #print(self.playerStack)
 
-    def selectFirst(self):
-        pass
+    def selectFirst(self,x,y):
+        #x = int(input("Select an x coordinate: "))
+        #y = int(input("Select a y coordinate: "))
+        while not self.checkValid(x, y):
+            x = int(input("Select an x coordinate: "))
+            y = int(input("Select a y coordinate: "))
+        while True:
+            if self.boardStack[self.convertCoords(x,y)] == "B":
+                random.shuffle(self.boardStack)
+                break
+            else:
+                break
+                
 
     def flag(self, x, y):
         selected = self.convertCoords(x, y)
-        if self.playerStack[selected] == 'x' or self.playerStack[selected] == 'B':
+        if type(self.playerStack[selected]) == int or self.playerStack[selected] == 'F':
             print("This position has already been revealed")
-            print(self.playerStack)
+
             return
         self.playerStack[selected] = 'F'
         print(self.playerStack)
 
     def unflag(self, x, y):
         selected = self.convertCoords(x, y)
-        if self.playerStack[selected] == 'x' or self.playerStack[selected] == 'B':
+        if type(self.playerStack[selected]) == int:
             print("This position has already been revealed")
-            print(self.playerStack)
             return
-        self.playerStack[selected] = ''
+        self.playerStack[selected] = '?'
         print(self.playerStack)
 
     def checkStatus(self):
