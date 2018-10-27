@@ -1,18 +1,16 @@
 import random
 
 '''
-
 TODO:
--bomb = 0 then show surroundings
 -checkStatus()
--_getSolution()
-
 '''
 class Minesweeper:
     def __init__(self):
         self.col = int(input("Enter a length: "))
         self.row = int(input("Enter a height: "))
         self.bomb = int(input("Enter number of bombs (max " + str(self.row *self.col - 1)+ " bombs): "))
+        self.wins = 0
+        self.loses = 0
 
         # if number of bombs is invalid it will loop until valid
         while self.bomb >= (self.row * self.col) or self.bomb <= 0:
@@ -72,12 +70,7 @@ class Minesweeper:
             choicex, choicey = self.select()
             index = self.convertCoords(choicex, choicey)
 
-        after = input("Play again? (y/n) \n")
         self._getSolution()
-            
-
-
-
 
 
     def print(self):
@@ -217,11 +210,6 @@ class Minesweeper:
             oldlist = oldlist[cols:]
             sublist.append(newlist)
         return sublist
-
-    def convertToCoords(self, index):
-        x =1
-        y =1
-        return x, y
 
 
 test = Minesweeper()
