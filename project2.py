@@ -55,6 +55,8 @@ class Minesweeper:
                 if self.playerStack[index] == 'B':
                     self.print()
                     print("Game Over")
+                    self.loses += 1
+                    self.score()
                     break
                 elif self.playerStack[index] == 'F':
                     print("This is position is flagged, unflag it if you want to select this position")
