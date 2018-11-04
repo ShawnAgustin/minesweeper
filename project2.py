@@ -6,11 +6,16 @@ TODO:
 '''
 class Minesweeper:
     def __init__(self):
+        self.wins = 0
+        self.loses = 0
+        self.start()
+
+        
+    def start(self):
         self.col = int(input("Enter a length: "))
         self.row = int(input("Enter a height: "))
         self.bomb = int(input("Enter number of bombs (max " + str(self.row *self.col - 1)+ " bombs): "))
-        self.wins = 0
-        self.loses = 0
+
 
         # if number of bombs is invalid it will loop until valid
         while self.bomb >= (self.row * self.col) or self.bomb <= 0:
@@ -37,7 +42,6 @@ class Minesweeper:
         # fills the playerStack with empty 'x' strings
         for i in range(self.row * self.col):
             self.playerStack.append('x')
-
         self.print()
 
         choicex, choicey = self.select()
@@ -85,7 +89,7 @@ class Minesweeper:
                             win = False
                             break
                         else:
-                            print('4') #if it has reached this point it is ok
+                            #if it has reached this point it is ok
                             continue
                 if win == True:
                     print("you win")
@@ -104,12 +108,12 @@ class Minesweeper:
             index = self.convertCoords(choicex, choicey)
 
         self._getSolution()
-        again = input("Do you want to play again? (y/n)")
+        again = input("Do you want to play again? (y/n)\n")
         if again == 'y':
             self.start()
-        
-    def start(self):
-        pass
+        else:
+            print("Thank you for playing! \n Final Score:\n")
+            self.score()
 
     def print(self):
         print(" ", end="|  ")
@@ -166,7 +170,6 @@ class Minesweeper:
         selected = self.convertCoords(x, y)
         if type(self.playerStack[selected]) == int or self.playerStack[selected] == 'F':
             print("This position has already been revealed")
-
             return
         self.playerStack[selected] = 'F'
 
