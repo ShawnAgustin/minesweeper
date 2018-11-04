@@ -34,9 +34,9 @@ class Minesweeper:
             self.boardStack.append('B')
         random.shuffle(self.boardStack)
 
-        # fills the playerStack with empty '' strings
+        # fills the playerStack with empty 'x' strings
         for i in range(self.row * self.col):
-            self.playerStack.append('?')
+            self.playerStack.append('x')
 
         self.print()
 
@@ -66,6 +66,36 @@ class Minesweeper:
             elif option == "unflag":
                 self.unflag(choicex, choicey)
 
+            if "x" not in self.playerStack:
+                win = ''
+                print('yee')
+                for i in range(len(self.boardStack)):
+                    if self.boardStack[i] == 'B':
+                        print('a')
+                        if self.boardStack[i] == 'F':
+                            print('1')
+                            continue
+                        else:
+                            print('2')
+                            win = False
+                            break
+                    else:
+                        if self.boardStack[i] == self.playerStack[i]:
+                            print('3')
+                            continue
+                        else:
+                            print('4')
+                            win = False
+                            break
+                        win = True
+                        break
+                if win == True:
+                    print("you win")
+                    break
+                else:
+                    print("you lose")
+                    break
+            print(self.playerStack)
             self.print()
             choicex, choicey = self.select()
             index = self.convertCoords(choicex, choicey)
