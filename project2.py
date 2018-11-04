@@ -42,6 +42,8 @@ class Minesweeper:
 
         choicex, choicey = self.select()
         index = self.convertCoords(choicex, choicey)
+
+        
         first = True
         while True:
             option = input("\"select\" or \"flag\" or \"unflag\"? ").strip()
@@ -67,41 +69,45 @@ class Minesweeper:
                 self.unflag(choicex, choicey)
 
             if "x" not in self.playerStack:
-                win = ''
-                print('yee')
+                win = True
                 for i in range(len(self.boardStack)):
-                    if self.boardStack[i] == 'B':
-                        print('a')
-                        if self.boardStack[i] == 'F':
-                            print('1')
+                    if self.boardStack[i] == 'B':   #check if this was a bomb
+                        print(self.playerStack[i])
+                        if self.playerStack[i] == 'F':   #check if this was flagged by the player
                             continue
-                        else:
-                            print('2')
+                        else:           #if it wasnt flagged you lose
                             win = False
                             break
                     else:
-                        if self.boardStack[i] == self.playerStack[i]:
-                            print('3')
-                            continue
-                        else:
-                            print('4')
+                        if self.playerStack[i] == 'F':  #if the player flagged a non bomb u lose
                             win = False
                             break
-                        win = True
-                        break
+                        else:
+                            print('4') #if it has reached this point it is ok
+                            continue
                 if win == True:
                     print("you win")
+                    self.wins += 1
+                    self.score()
                     break
                 else:
                     print("you lose")
+                    self.loses += 1
+                    self.score()
                     break
-            print(self.playerStack)
+                
+                
             self.print()
             choicex, choicey = self.select()
             index = self.convertCoords(choicex, choicey)
 
         self._getSolution()
-
+        again = input("Do you want to play again? (y/n)")
+        if again == 'y':
+            self.start()
+        
+    def start(self):
+        pass
 
     def print(self):
         print(" ", end="|  ")
@@ -240,6 +246,9 @@ class Minesweeper:
             oldlist = oldlist[cols:]
             sublist.append(newlist)
         return sublist
+
+    def score(self):
+        print("Wins:", self.wins, "Losses:", self.loses)
 
 
 test = Minesweeper()
