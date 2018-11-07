@@ -1,19 +1,20 @@
 import random
 
-'''
-TODO:
--checkStatus()
-'''
 class Minesweeper:
     def __init__(self):
-        self.wins = 0
-        self.loses = 0
-        self.start()
+        #self.wins = 0
+        #self.loses = 0
+        self.status = ''
+        #self.start()
 
         
     def start(self):
         self.col = int(input("Enter a length: "))
         self.row = int(input("Enter a height: "))
+        while self.col == 1 and self.row == 1:
+            print("Size of board must be larger than 1 square")
+            self.col = int(input("Enter a length: "))
+            self.row = int(input("Enter a height: "))
         self.bomb = int(input("Enter number of bombs (max " + str(self.row *self.col - 1)+ " bombs): "))
 
 
@@ -50,70 +51,38 @@ class Minesweeper:
         
         first = True
         while True:
-            option = input("\"select\" or \"flag\" or \"unflag\"? ").strip()
-            if option == "select":
+            option = input("\"[s]elect\" or \"[f]lag\" or \"[u]nflag\"? ").strip()
+            option = option.casefold()
+            if option == "select" or option == "s":
                 if first == True:
                     self.selectFirst(choicex,choicey)
                     first = False
                 self.choose(choicex, choicey)
                 if self.playerStack[index] == 'B':
                     self.print()
+                    self.status = False
                     print("Game Over")
-                    self.loses += 1
-                    self.score()
                     break
                 elif self.playerStack[index] == 'F':
                     print("This is position is flagged, unflag it if you want to select this position")
                 else:
                     if self.checkSurround(choicex,choicey) == 0:
-                        self.showSurround(choicex,choicey)
-                    #else:
+                        show = self.showSurround(choicex,choicey)
                     self.playerStack[index] = self.checkSurround(choicex, choicey)
-            elif option == "flag":
+            elif option == "flag" or option == "f":
                 self.flag(choicex, choicey)
-            elif option == "unflag":
+            elif option == "unflag" or option == "u":
                 self.unflag(choicex, choicey)
-
-            if "x" not in self.playerStack:
-                win = True
-                for i in range(len(self.boardStack)):
-                    if self.boardStack[i] == 'B':   #check if this was a bomb
-                        print(self.playerStack[i])
-                        if self.playerStack[i] == 'F':   #check if this was flagged by the player
-                            continue
-                        else:           #if it wasnt flagged you lose
-                            win = False
-                            break
-                    else:
-                        if self.playerStack[i] == 'F':  #if the player flagged a non bomb u lose
-                            win = False
-                            break
-                        else:
-                            #if it has reached this point it is ok
-                            continue
-                if win == True:
-                    print("you win")
-                    self.wins += 1
-                    self.score()
-                    break
-                else:
-                    print("you lose")
-                    self.loses += 1
-                    self.score()
-                    break
-                
-                
+            if (self.playerStack.count('x')+self.playerStack.count('F')) == self.boardStack.count('B') :#When you have chosen all spots not a bomb you win
+                self.status = True
+                print("You win!")
+                break
+            
             self.print()
             choicex, choicey = self.select()
             index = self.convertCoords(choicex, choicey)
 
         self._getSolution()
-        again = input("Do you want to play again? (y/n)\n")
-        if again == 'y':
-            self.start()
-        else:
-            print("Thank you for playing! \n Final Score:\n")
-            self.score()
 
     def print(self):
         print(" ", end="|  ")
@@ -152,7 +121,6 @@ class Minesweeper:
             return
         else:
             self.playerStack[selected] = revealed
-        #print(self.playerStack)
 
     def selectFirst(self,x,y):
         while not self.checkValid(x, y):
@@ -178,10 +146,16 @@ class Minesweeper:
         if type(self.playerStack[selected]) == int:
             print("This position has already been revealed")
             return
-        self.playerStack[selected] = '?'
+        self.playerStack[selected] = 'x'
 
     def checkStatus(self):
-        pass
+        if self.status == '':
+            return "In Progress"
+        elif self.status == True:
+            return "Win"
+        else:
+            return "Lose"
+            
 
     def _getSolution(self):
         print("== SOLUTION ==")
@@ -210,7 +184,7 @@ class Minesweeper:
         for y in checky:
             for x in checkx:
                 if x < 0 or y < 0 or x >= self.col or y >= self.row:
-                    # out of range error messes up the check
+
                     continue
                 else:
                     if board[y][x] == 'B':
@@ -235,11 +209,15 @@ class Minesweeper:
                     pair.append(x+1)
                     pair.append(y+1)
                     toCheck.append(pair)
-                    '''insert code here will use checkSurround'''
+        toShow = []
         for i in toCheck:
             selected = self.convertCoords(i[0],i[1])
+        
+            if self.checkSurround(i[0],i[1]) == 0:
+                toShow.append([i[0],i[1]])
+            
             self.playerStack[selected] = self.checkSurround(i[0], i[1])
-         #need to convert index into coords
+        return toShow
 
     def split(self, alist, cols):
         oldlist = alist
@@ -252,9 +230,5 @@ class Minesweeper:
             sublist.append(newlist)
         return sublist
 
-    def score(self):
-        print("Wins:", self.wins, "Losses:", self.loses)
 
-
-test = Minesweeper()
 
